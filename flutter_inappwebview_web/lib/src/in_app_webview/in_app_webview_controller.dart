@@ -518,6 +518,16 @@ class WebPlatformInAppWebViewController extends PlatformInAppWebViewController
   }
 
   @override
+  Future<void> postWebMessage(
+      {required WebMessage message, WebUri? targetOrigin}) async {
+    Map<String, dynamic> args = <String, dynamic>{};
+    args.putIfAbsent('message', () => message.data);
+    args.putIfAbsent(
+        'targetOrigin', () => targetOrigin?.uriValue.toString() ?? "*");
+    channel?.invokeMethod('postWebMessage', args);
+  }
+
+  @override
   Future<void> injectJavascriptFileFromUrl(
       {required WebUri urlFile,
       ScriptHtmlTagAttributes? scriptHtmlTagAttributes}) async {

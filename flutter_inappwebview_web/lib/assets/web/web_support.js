@@ -355,6 +355,26 @@ window.flutter_inappwebview = {
                 }
                 return result;
             },
+            postWebMessage: function(message, targetOrigin) {
+                console.log("postWebMessage: " + message + " to targetOrigin: " + targetOrigin);
+                var iframe = webView.iframe;
+                if (iframe != null) {
+                    try {
+                        let data = message;
+                        if (typeof data === "string") {
+                            try {
+                                const parsed = JSON.parse(data);
+                                data = parsed;
+                            } catch (err) {
+                                console.log("Not a valid JSON string, keep raw:", data);
+                            }
+                        }
+                        iframe.contentWindow.postMessage(data, targetOrigin);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
+            },
             stopLoading: function(steps) {
                 var iframe = webView.iframe;
                 if (iframe != null) {

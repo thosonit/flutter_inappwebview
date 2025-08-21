@@ -107,6 +107,12 @@ class InAppWebViewWebElement implements Disposable {
       case "evaluateJavascript":
         String source = call.arguments["source"];
         return await evaluateJavascript(source: source);
+      case "postWebMessage":
+        await postWebMessage(
+          message: call.arguments["message"].toString(),
+          targetOrigin: call.arguments["targetOrigin"].toString(),
+        );
+        break;
       case "stopLoading":
         await stopLoading();
         break;
@@ -334,6 +340,13 @@ class InAppWebViewWebElement implements Disposable {
 
   Future<dynamic> evaluateJavascript({required String source}) async {
     return jsWebView?.evaluateJavascript(source.toJS)?.toDart;
+  }
+
+  Future<dynamic> postWebMessage({
+    required String message,
+    required String targetOrigin,
+  }) async {
+    return jsWebView?.postWebMessage(message.toJS, targetOrigin.toJS);
   }
 
   Future<void> stopLoading() async {
